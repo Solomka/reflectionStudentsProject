@@ -1,4 +1,4 @@
-package ua.training.reflection_student.model;
+package ua.training.reflection_student.model.student;
 
 import ua.training.reflection_student.utils.annotation.ConcreteClass;
 import ua.training.reflection_student.utils.annotation.ConcreteField;

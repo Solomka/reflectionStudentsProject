@@ -1,4 +1,4 @@
-package ua.training.reflection_student.model;
+package ua.training.reflection_student.model.student;
 
 public interface DiplomaWritable {
 
