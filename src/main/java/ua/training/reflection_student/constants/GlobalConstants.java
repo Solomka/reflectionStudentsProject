@@ -6,6 +6,6 @@ import ua.training.reflection_student.utils.annotation.RunnableMethod;
 
 public interface GlobalConstants {
 
-	String  CLASS_FULLNAME = "ua.training.reflection_student.model.student.GraduateStudent";
+	String  CLASS_FULLNAME = "ua.training.reflection_student.model.student.GraduateStudentImpl";
 	Class<? extends Annotation> ANNOTATION_TYPE = RunnableMethod.class;	
 }

@@ -1,51 +1,23 @@
 package ua.training.reflection_student.model.student;
 
-import ua.training.reflection_student.utils.annotation.ConcreteClass;
-import ua.training.reflection_student.utils.annotation.ConcreteField;
-import ua.training.reflection_student.utils.annotation.RunnableMethod;
-import ua.training.reflection_student.view.ViewMessage;
+public interface GraduateStudent {
 
-@ConcreteClass
-public class GraduateStudent extends Student implements DiplomaWritable {
+	Long getId();
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	void setId(Long id);
 
-	@ConcreteField
-	private String diplomaTheme;
+	String getFullName();
 
-	public GraduateStudent() {
-	}
+	void setFullName(String fullName);
 
-	public GraduateStudent(String diplomaTheme) {
-		this.diplomaTheme = diplomaTheme;
-	}
+	int getCourse();
 
-	public GraduateStudent(Long id, String fullName, int course, String diplomaTheme) {
-		super(id, fullName, course);
-		this.diplomaTheme = diplomaTheme;
-	}
+	void setCourse(int course);
 
-	@RunnableMethod
-	public String getDiplomaTheme() {
-		return diplomaTheme;
-	}
+	String getDiplomaTheme();
 
-	public void setDiplomaTheme(String diplomaTheme) {
-		this.diplomaTheme = diplomaTheme;
-	}
+	void setDiplomaTheme(String diplomaTheme);
 
-	@Override
-	@RunnableMethod
-	public String writeDiploma() {
-		return ViewMessage.DIPLOMA_WRITING;
-	}
+	public String toString();
 
-	@Override
-	@RunnableMethod
-	public String toString() {
-		return super.toString() + ", diplomaTheme =" + diplomaTheme;
-	}
 }
