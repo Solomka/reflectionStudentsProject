@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 import ua.training.reflection_student.utils.annotation.RunnableMethod;
 
-public class Student implements Serializable{
+public class Student implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private Long id;
 	private String fullName;
 	private int course;
@@ -57,7 +57,6 @@ public class Student implements Serializable{
 
 	@Override
 	public String toString() {
-		return getClass() + ": id= " + id + ", fullName= " + fullName + ", course =" + course;
+		return getClass().getSimpleName() + ": id = " + id + ", fullName = " + fullName + ", course =" + course;
 	}
-
 }

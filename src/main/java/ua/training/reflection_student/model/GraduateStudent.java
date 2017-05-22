@@ -3,6 +3,7 @@ package ua.training.reflection_student.model;
 import ua.training.reflection_student.utils.annotation.ConcreteClass;
 import ua.training.reflection_student.utils.annotation.ConcreteField;
 import ua.training.reflection_student.utils.annotation.RunnableMethod;
+import ua.training.reflection_student.view.ViewMessage;
 
 @ConcreteClass
 public class GraduateStudent extends Student implements DiplomaWritable {
@@ -39,7 +40,7 @@ public class GraduateStudent extends Student implements DiplomaWritable {
 	@Override
 	@RunnableMethod
 	public String writeDiploma() {
-		return "The actuality of my dimploma thema consists in...";
+		return ViewMessage.DIPLOMA_WRITING;
 	}
 
 	@Override

@@ -1,10 +1,32 @@
 package ua.training.reflection_student.view;
 
-import java.util.Objects;
+import java.util.List;
+import java.util.Map;
 
 public class View {
 
-	
+	public void printObjectsList(String message, List<?> classInterfaces) {
+		StringBuilder stringBuilder = new StringBuilder();
+
+		for (Object classInterface : classInterfaces) {
+			stringBuilder.append(classInterface.toString()).append(ViewMessageUtils.NEW_LINE);
+		}
+
+		printMessage(message, ViewMessageUtils.NEW_LINE, stringBuilder.toString());
+	}
+
+	public void printClassAnnotatedMethodsResults(Map<String, Object> methodsInvokationResults) {
+		StringBuilder stringBuilder = new StringBuilder();
+
+		for (String methodName : methodsInvokationResults.keySet()) {
+			stringBuilder.append(methodName).append(ViewMessageUtils.COLON).append(ViewMessageUtils.EMPTY_STR)
+					.append(methodsInvokationResults.get(methodName)).append(ViewMessageUtils.NEW_LINE);
+		}
+
+		printMessage(ViewMessage.CLASS_ANNOTATED_METHODS_INVOKATION_RESULTS, ViewMessageUtils.NEW_LINE,
+				stringBuilder.toString());
+	}
+
 	/**
 	 * Shows constructed message
 	 * 
@@ -31,5 +53,4 @@ public class View {
 		}
 		return builder.toString();
 	}
-
 }

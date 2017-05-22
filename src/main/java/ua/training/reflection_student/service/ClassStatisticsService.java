@@ -8,104 +8,102 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
-import ua.training.reflection_student.model.Student;
-import ua.training.reflection_student.utils.annotation.RunnableMethod;
-import ua.training.reflection_student.view.View;
+import ua.training.reflection_student.model.dto.ConstructorDTO;
+import ua.training.reflection_student.model.dto.FieldDTO;
+import ua.training.reflection_student.model.dto.MethodDTO;
 
 public class ClassStatisticsService {
 
-	private View view;
+	private Class<?> clazz;
+	private Object clazzInstance;
 
-	public ClassStatisticsService(View view) {
-		this.view = Objects.requireNonNull(view);
-	}
+	public ClassStatisticsService(String className, Class<?>[] types, Object[] values) {
+		Objects.requireNonNull(className);
+		Objects.requireNonNull(types);
+		Objects.requireNonNull(values);
 
-	public void showClassStatistics(Student student) {
-		Class clazz = student.getClass();
-	
-		Object obj = null;
 		try {
-			obj = clazz.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
+			this.clazz = Class.forName(className);
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 
-		// class name
-		System.out.println("Class  name: " + clazz.getSimpleName());
+		instantiateClassObject(types, values);
+	}
 
-		// superclass name
-		System.out.println("Super class name: " + clazz.getSuperclass().getSimpleName());
-
-		// package name and short class name
-		System.out.println("Package name/short class name: " + clazz.getName());
-
-		// class modifiers
-		System.out.println("Class modifiers: " + Modifier.toString(clazz.getModifiers()));
-
-		// class annotations
-		System.out.println("Class annotations: " + Arrays.toString(clazz.getAnnotations()));
-
-		// class interfaces
-		List<Class<?>> interfaces = getAllInterfaces(new ArrayList<Class<?>>(), clazz);
-		System.out.println("Class interfaces: " + interfaces.toString());
-
-		// class fields with names, types, modifiers, annotations
-		List<Field> fields = getAllFields(new ArrayList<Field>(), clazz);
-		System.out.println("Class fields: " + fields.toString());
-
-		// class constructors with params
-		Constructor[] constructors = clazz.getDeclaredConstructors();
-
-		for (Constructor constructor : constructors) {
-			System.out.println("Constructor: " + constructor.getName() + " ");
-			Class[] paramTypes = constructor.getParameterTypes();
-			for (Class paramType : paramTypes) {
-				System.out.println("Parameter type: " + paramType.getName() + " ");
-			}
-			System.out.println();
+	private void instantiateClassObject(Class<?>[] types, Object[] values) {
+		Constructor<?> cons = null;
+		try {
+			cons = clazz.getConstructor(types);
+		} catch (NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
 		}
-
-		// class methods with names, modifiers, params types, annotations
-		System.out.println("Class methods: ");
-		for (Method m : clazz.getMethods()) {
-			System.out.println(Modifier.toString(m.getModifiers()) + " " + m.getReturnType() + " " + m.getName());
-
-			Class[] paramTypes = m.getParameterTypes();
-			System.out.print("Parametr types: ");
-			for (Class paramType : paramTypes) {
-				System.out.print(" " + paramType.getName());
-			}
-			System.out.println("\n");
-
-			System.out.println("Annotations");
-			Annotation[] annotations = m.getAnnotations();
-			for (Annotation annotation : annotations) {
-				System.out.println("Annotation: " + annotation);
-			}
-		}
-		// invoke annotated methods
-		for (Method m : clazz.getMethods()) {
-
-			if (m.isAnnotationPresent(RunnableMethod.class)) {
-				Object res = null;
-				try {
-					res = m.invoke(obj);
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if (res != null) {
-					System.out.println("Method invokation: " + res);
-				}
-			}
+		try {
+			this.clazzInstance = cons.newInstance(values);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
 		}
 	}
 
-	public static List<Field> getAllFields(List<Field> fields, Class<?> type) {
+	public Class<?> getClazz() {
+		return clazz;
+	}
+
+	public Object getClazzInstance() {
+		return clazzInstance;
+	}
+
+	public String getShortClassName() {
+		return clazz.getSimpleName();
+	}
+
+	public String getShortSuperClassName() {
+		return clazz.getSuperclass().getSimpleName();
+	}
+
+	public String getPackageAndClassName() {
+		return clazz.getName();
+	}
+
+	public String getClassModifiers() {
+		return Modifier.toString(clazz.getModifiers());
+	}
+
+	public List<Annotation> getClassAnnotations() {
+		return new ArrayList<>(Arrays.asList(clazz.getAnnotations()));
+	}
+
+	public List<Class<?>> getClassAndClassInheritedInterfaces() {
+		return getAllInterfaces(new ArrayList<Class<?>>(), clazz);
+	}
+
+	private List<Class<?>> getAllInterfaces(List<Class<?>> interfaces, Class<?> type) {
+		interfaces.addAll(Arrays.asList(type.getInterfaces()));
+		if (type.getSuperclass() != null) {
+			getAllInterfaces(interfaces, type.getSuperclass());
+		}
+		return interfaces;
+	}
+
+	public List<FieldDTO> getClassAndClassInheritedFields() {
+		List<FieldDTO> resultedFields = new ArrayList<>();
+
+		List<Field> fields = getAllFields(new ArrayList<Field>(), clazz);
+		for (Field field : fields) {
+			resultedFields.add(new FieldDTO(field.getModifiers(), field.getType().getName(), field.getName(),
+					new ArrayList<>(Arrays.asList(field.getAnnotations()))));
+		}
+
+		return resultedFields;
+	}
+
+	private List<Field> getAllFields(List<Field> fields, Class<?> type) {
 		fields.addAll(Arrays.asList(type.getDeclaredFields()));
 
 		if (type.getSuperclass() != null) {
@@ -115,14 +113,56 @@ public class ClassStatisticsService {
 		return fields;
 	}
 
-	public static List<Class<?>> getAllInterfaces(List<Class<?>> interfaces, Class<?> type) {
-		interfaces.addAll(Arrays.asList(type.getInterfaces()));
+	public List<ConstructorDTO> getClassConstructors() {
+		List<ConstructorDTO> resultedConstructors = new ArrayList<>();
 
-		if (type.getSuperclass() != null) {
-			getAllInterfaces(interfaces, type.getSuperclass());
+		for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
+			resultedConstructors.add(
+					new ConstructorDTO(constructor.getName(), getStringParameters(constructor.getParameterTypes())));
 		}
 
-		return interfaces;
+		return resultedConstructors;
 	}
 
+	public List<MethodDTO> getClassMethods() {
+		List<MethodDTO> resultedMethods = new ArrayList<>();
+
+		for (Method method : clazz.getMethods()) {
+			resultedMethods.add(new MethodDTO(method.getModifiers(), method.getReturnType().getName(), method.getName(),
+					getStringParameters(method.getParameterTypes()),
+					new ArrayList<>(Arrays.asList(method.getAnnotations()))));
+		}
+
+		return resultedMethods;
+	}
+
+	private List<String> getStringParameters(Class<?>[] params) {
+		List<String> stringParameters = new ArrayList<>();
+
+		for (Class<?> param : params) {
+			stringParameters.add(param.getName());
+		}
+
+		return stringParameters;
+	}
+
+	public Map<String, Object> invokeAnnotatedMehods(Class<? extends Annotation> annotationType) {
+
+		Map<String, Object> methodsInvokationResults = new HashMap<>();
+
+		for (Method m : clazz.getMethods()) {
+			if (m.isAnnotationPresent(annotationType)) {
+				Object methodInvokationResult = null;
+				try {
+					methodInvokationResult = m.invoke(clazzInstance);
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				if (methodInvokationResult != null) {
+					methodsInvokationResults.put(m.getName(), methodInvokationResult);
+				}
+			}
+		}
+		return methodsInvokationResults;
+	}
 }
