@@ -97,18 +97,4 @@ public class ClassStatisticsServiceTest {
 
 		assertEquals(expectedClassAnnotations, actualClassAnnotations);
 	}
-
-	@Test
-	// @Ignore
-	public void testGetClassAndClassInheritedInterfaces() {
-		ClassStatisticsService classStatisticsService = new ClassStatisticsServiceImpl(TEST_CLASS_FULLNAME,
-				new Class<?>[] { String.class }, new Object[] { "Test value" });
-
-		List<Class<?>> expectedClassAndClassInheritedInterfaces = new ArrayList<>(
-				Arrays.asList(TEST_CLASS.getInterfaces()));
-		List<Class<?>> actualClassAndClassInheritedInterfaces = classStatisticsService
-				.getClassAndClassInheritedInterfaces();
-
-		assertEquals(expectedClassAndClassInheritedInterfaces, actualClassAndClassInheritedInterfaces);
-	}
 }
