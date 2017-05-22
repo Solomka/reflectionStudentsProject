@@ -46,6 +46,6 @@ public class GraduateStudentImpl extends Student implements GraduateStudent, Dip
 	@Override
 	@RunnableMethod
 	public String toString() {
-		return super.toString() + ", diplomaTheme =" + diplomaTheme;
+		return super.toString() + ", diplomaTheme = " + diplomaTheme;
 	}
 }

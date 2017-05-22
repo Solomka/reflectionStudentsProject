@@ -57,6 +57,6 @@ public class Student implements Serializable {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + ": id = " + id + ", fullName = " + fullName + ", course =" + course;
+		return getClass().getSimpleName() + ": id = " + id + ", fullName = " + fullName + ", course = " + course;
 	}
 }
