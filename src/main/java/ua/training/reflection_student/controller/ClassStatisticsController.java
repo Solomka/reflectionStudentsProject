@@ -10,6 +10,7 @@ import ua.training.reflection_student.model.dto.ConstructorDTO;
 import ua.training.reflection_student.model.dto.FieldDTO;
 import ua.training.reflection_student.model.dto.MethodDTO;
 import ua.training.reflection_student.service.ClassStatisticsService;
+import ua.training.reflection_student.service.ClassStatisticsServiceImpl;
 import ua.training.reflection_student.view.View;
 import ua.training.reflection_student.view.ViewMessage;
 import ua.training.reflection_student.view.ViewMessageUtils;
@@ -31,7 +32,7 @@ public class ClassStatisticsController {
 	}
 
 	private void showClassStatistics() {
-
+		
 		showClassName(classStatisticsService.getShortClassName());
 		showSuperClassName(classStatisticsService.getShortSuperClassName());
 		showPackageAndClassName(classStatisticsService.getPackageAndClassName());
