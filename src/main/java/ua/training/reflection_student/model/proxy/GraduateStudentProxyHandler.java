@@ -7,6 +7,12 @@ import ua.training.reflection_student.model.student.GraduateStudent;
 
 public class GraduateStudentProxyHandler implements InvocationHandler {
 
+	private static final String GET_ID_METHOD = "getId";
+	private static final String GET_FULLNAME_METHOD = "getFullName";
+	private static final String GET_COURSE_METHOD = "getCourse";
+	private static final String GET_DIPLOMA_THEME_METHOD = "getDiplomaTheme";
+	private static final String TO_STRING = "toString";
+
 	private GraduateStudent graduateStudent;
 
 	public GraduateStudentProxyHandler(GraduateStudent graduateStudent) {
@@ -18,18 +24,18 @@ public class GraduateStudentProxyHandler implements InvocationHandler {
 		String methodName = method.getName();
 
 		switch (methodName) {
-		case "getId":
+		case GET_ID_METHOD:
 			return graduateStudent.getId();
-		case "getFullName":
+		case GET_FULLNAME_METHOD:
 			return graduateStudent.getFullName();
-		case "getCourse":
+		case GET_COURSE_METHOD:
 			return graduateStudent.getCourse();
-		case "getDiplomaTheme":
+		case GET_DIPLOMA_THEME_METHOD:
 			return graduateStudent.getDiplomaTheme();
-		case "toString":
+		case TO_STRING:
 			return graduateStudent.toString();
 		default:
-			throw new RuntimeException("Modifiers calls are forbiddend");
+			throw new RuntimeException("Modificators calls on the immutable objects are forbidden");
 		}
 
 	}
