@@ -8,7 +8,7 @@ import ua.training.reflection_student.model.proxy.GraduateStudentProxyHandler;
 import ua.training.reflection_student.service.ClassStatisticsServiceTest;
 
 @RunWith(Suite.class)
-@SuiteClasses({ ClassStatisticsServiceTest.class, GraduateStudentProxyHandler.class })
+@SuiteClasses({ ClassStatisticsServiceTest.class, GraduateStudentProxyHandlerTest.class })
 public class TestSuite {
 	/*
 	 * empty class
